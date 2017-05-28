@@ -1,0 +1,145 @@
+<html>
+<head>
+	<title></title>
+
+	<script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+
+	.heading {
+		width: 65%;
+		margin: auto;
+		text-align: center
+	}
+
+	.button_cont {
+		width: 200;
+		margin: auto;
+		border-top: 1px solid black;
+		border-bottom: 1px solid black;
+	}
+
+</style>
+</head>
+<body>
+
+	<h1 class='heading'>Animation in 3D plot</h1>
+
+	<h2 class='heading'>Random Walk</h2>
+
+<div id='plot'></div>
+
+
+<div class='button_cont'>
+
+	<button id='back'>Clear</button>
+
+	<button id='play_button'>Play</button>
+
+	<button id='stop_button'>Stop</button>
+
+	<button id='forwards'>&gt&gt</button>
+</div>
+
+
+<script type="text/javascript">
+
+
+var d3 = Plotly.d3;
+
+var plot1 = d3.select('#plot').node();
+
+var cnt = 0;
+
+
+function rand_gen(){
+	return ( Math.exp(Math.random()*3) -  Math.exp(Math.random()*3))* 10;
+}
+
+
+
+x_data = d3.range(1);
+
+
+var trace_3d = {
+	x: x_data,
+	y: x_data,
+	z: x_data,
+	mode: 'lines+markers',
+
+	line: {
+		width: 10,
+		color: 'black'
+	},
+	marker: {
+		color: 'teal',
+		line: {
+			width: 2,
+			color: 'black'
+		}
+	},
+	opacity: 0.65,
+	type: 'scatter3d'
+}
+
+
+Plotly.newPlot(plot1, [trace_3d])
+
+
+d3.select('#play_button').on('click', function(){
+
+	cnt = cnt+ (1/360);
+
+
+	three_d_anim = setInterval(function(){
+
+		Plotly.extendTraces(plot1, {y: [[rand_gen()]], x: [[rand_gen()]], z: [[rand_gen()]]}, [0])
+
+	}, 100)
+
+
+})
+
+
+d3.select('#stop_button').on('click', function(){
+
+	console.log('stop button')
+	clearInterval(three_d_anim)
+})
+
+d3.select('#forwards').on('click', function(){
+
+	Plotly.extendTraces(plot1, {y: [[rand_gen()]], x: [[rand_gen()]], z: [[rand_gen()]]}, [0])
+
+})
+
+d3.select('#back').on('click', function(){
+
+	var trace_3d = {
+	x: x_data,
+	y: x_data,
+	z: x_data,
+	mode: 'lines+markers',
+
+	line: {
+		width: 10,
+		color: 'black'
+	},
+	marker: {
+		color: 'teal',
+		line: {
+			width: 2,
+			color: 'black'
+		}
+	},
+	opacity: 0.65,
+	type: 'scatter3d'
+}
+	Plotly.newPlot(plot1, [trace_3d])
+})
+
+</script>
+
+</body>
+</html>
